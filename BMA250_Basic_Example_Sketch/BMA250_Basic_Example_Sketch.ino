@@ -42,7 +42,7 @@ void loop()
   Serial.print(",  t: ");   
   Serial.print(AccelTemperature);
   Serial.println("degC");    
-  
+
   delay(500);
 }
 
@@ -54,7 +54,7 @@ void BMA250Init()
   Wire.write(0x0F); 
   Wire.write(BMA250_RANGE);
   Wire.endTransmission();
-  
+
   // Setup the bandwidth
   Wire.beginTransmission(BMA250_I2CADDR);
   Wire.write(0x10);
@@ -66,32 +66,33 @@ void BMA250Init()
 int BMA250ReadAccel()
 {
   uint8_t ReadBuff[8];
-  
+
   // Read the 7 data bytes from the BMA250
   Wire.beginTransmission(BMA250_I2CADDR);
   Wire.write(0x02);
   Wire.endTransmission();
   Wire.requestFrom(BMA250_I2CADDR,7);
-  
+
   for(int i = 0; i < 7;i++)
   {
     ReadBuff[i] = Wire.read();
   }
-  
+
   AccelX = ReadBuff[1] << 8;
   AccelX |= ReadBuff[0];
   AccelX >>= 6;
-  
+
   AccelY = ReadBuff[3] << 8;
   AccelY |= ReadBuff[2];
   AccelY >>= 6;
-  
+
   AccelZ = ReadBuff[5] << 8;
   AccelZ |= ReadBuff[4];
   AccelZ >>= 6;  
 
   AccelTemperature = (ReadBuff[6] * 0.5) + 24.0;
 }
+
 
 
 
